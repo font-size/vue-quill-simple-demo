@@ -1,24 +1,18 @@
-# quill-editor
+# vue-quill-simple-demo
 
-## Project setup
+## 简介
 ```
-npm install
+一个简单的vue项目使用quill示例
+1：toolbar使用。2：v-model数据双向绑定。3：一个简单自定义样式实现（字体） 4：自定义blot
 ```
+<a href="http://www.lichengblog.com/demo/vue-quill-simple-demo/index.html" target="_blank">在线预览</a>
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### 资源
 
-### Compiles and minifies for production
-```
-npm run build
-```
+<a href="https://quilljs.com" target="_blank">quill官网</a><br>
+<a href="https://github.com/quilljs/quill" target="_blank">quill GitHub</a><br>
+<a href="https://www.kancloud.cn/liuwave/quill/1409423" target="_blank">quill中文文档</a><br>
 
-### Lints and fixes files
-```
-npm run lint
-```
+## License
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>
