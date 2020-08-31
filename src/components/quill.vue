@@ -1,6 +1,16 @@
 <template>
   <div id="app">
     <div class="quill-editor">
+      <a-modal v-model="visible" title="秀米" width="90%" :footer="null" :maskClosable="false" :centered="true" :keyboard="false">
+        <div v-if="visible">
+          <iframe src="./pluging/xiumi-ue-dialog-v5.html" frameborder="0" width="100%" :height="(fullheight - 150)+'px'" id="xiumiIframe"></iframe>
+        </div>
+      </a-modal>
+      <a-modal v-model="visible2" title="135编辑器" width="90%" :footer="null" :maskClosable="false" :centered="true" :keyboard="false">
+        <div v-if="visible2">
+          <iframe src="./pluging/135EditorDialogPage.html" frameborder="0" width="100%" :height="(fullheight - 150)+'px'" id="xiumiIframe"></iframe>
+        </div>
+      </a-modal>
       <div id="toolbar">
          <span class="ql-formats">
             <select class="ql-font"></select>
@@ -46,7 +56,10 @@
             <button class="ql-clean"></button>
           </span>
           <span class="ql-formats">
-            <button id="custom-button-xiumi" title="秀米" @click="showmi"></button>
+            <button id="custom-button-xiumi" title="秀米" @click="showModal"></button>
+          </span>
+          <span class="ql-formats">
+            <button id="custom-button-135" title="135编辑器" @click="showModal2"></button>
           </span>
           <span class="ql-formats">
              <select class="ql-size toolbarButton">
@@ -79,6 +92,7 @@
 </template>
 
 <script>
+
 // 引入原始组件
 import * as Quill from 'quill'
 // 引入核心样式和主题样式
@@ -88,6 +102,8 @@ let sizes = ['14px', '16px','18px','20px','22px','24px','26px','28px'];
 let Size = Quill.import('formats/size');
 Size.whitelist = sizes;   
 Quill.register(Size, true);
+import blotSelect from './blot'
+blotSelect(Quill)
 export default {
   name: 'quill',
   components: {
@@ -95,6 +111,10 @@ export default {
   data(){
     return {
       quill: null,
+      selection: {},
+      visible: false,
+      visible2: false,
+      fullheight: document.documentElement.clientHeight,
       options: {
         theme: 'snow',
         modules: {
@@ -108,6 +128,8 @@ export default {
   mounted () {
     // 初始化编辑器
     this._initEditor()
+    // 把setRichText暴露到window上
+    window.setRichText = this.setRichText
   },
   methods:{
     // 初始化编辑器
@@ -116,10 +138,19 @@ export default {
       let editorDom = this.$el.querySelector('.editor')
       // 初始化编辑器
       this.quill = new Quill(editorDom, this.options)
+      // 文字变化时监听事件
       this.quill.on('text-change', () => {
         this.emitChange()
         this.selection = this.quill.getSelection()
       })
+      // 光标选择变化时监听事件
+      this.quill.on('selection-change', () => {
+        this.selection = this.quill.getSelection()
+      })
+      // 插入内容
+      this.firstSetHtml()
+      this.listenPaste()
+      this.$emit('ready', this.quill)
     },
     // 更新text-change
     emitChange() {
@@ -130,6 +161,52 @@ export default {
       this.$emit('input', html)
       this.$emit('change', { html, text, quill })
       this.$emit("getConetntLength", this.quill.getLength())
+    },
+    firstSetHtml() {
+      if(this.value) {
+        // 判断是否有秀米和或135元素
+        if(this.value.indexOf('xiumi.us') > -1 || this.value.indexOf('135editor.com') > -1 ) {
+          let originNode =  new DOMParser().parseFromString(this.value,'text/html').body.childNodes
+          // const nodeList = document.querySelectorAll(".ql-editor > *")
+          this.nodesInQuill(originNode)
+        } else {
+          // 正常插入
+          this.quill.clipboard.dangerouslyPasteHTML(this.value)
+          // this.$refs.editor.children[0].innerHTML = this.value
+        }
+      }
+    },
+    nodesInQuill(originNode) {
+      for(let i = originNode.length - 1; i >= 0; i --) {
+        if(originNode[i].localName === 'section') {
+          this.setRichText(originNode[i].outerHTML, 0)
+        } else {
+          this.quill.clipboard.dangerouslyPasteHTML(0, originNode[i].outerHTML)
+        }
+      }
+    },
+    listenPaste() {
+      document.querySelector('.quill-editor').addEventListener('paste', (e) => {
+        const msg = (e.clipboardData || window.clipboardData).getData('text/html') // 获取粘贴板文本
+        if(msg) { // 如果为空，则不拦截
+          e.preventDefault(); // 阻止复制动作
+          e.stopPropagation(); // 阻止冒泡
+          const value = new DOMParser().parseFromString(msg,'text/html').body.childNodes // 转成nodes
+          this.nodesInQuill(value)
+        }
+      })
+    },
+    setRichText(e, t) {
+      const index = this.selection?this.selection.index: 0
+      this.quill.insertEmbed(t || index, 'AppPanelEmbed', e)
+      this.visible = false
+      this.visible2 = false
+    },
+    showModal() {
+      this.visible = true
+    },
+    showModal2() {
+      this.visible2 = true
     }
   }
 }
@@ -140,7 +217,10 @@ export default {
 .editor {
   height: 400px;
 }
-#custom-button-xiumi{
+#toolbar button {
+  outline:none
+}
+#custom-button-xiumi, #custom-button-135 {
   background-size: contain;
   background-repeat: no-repeat;
   height: 16px;
@@ -155,5 +235,11 @@ export default {
 }
 #custom-button-xiumi:hover {
   background-image: url('http://xiumi.us/connect/ue/xiumi-connect-icon.png');
+}
+#custom-button-135 {
+  background-image: url('http://static.135editor.com/img/icons/editor-135-icon.png');
+}
+#custom-button-135:hover {
+  background-image: url('http://static.135editor.com/img/icons/editor-135-icon.png');
 }
 </style>
