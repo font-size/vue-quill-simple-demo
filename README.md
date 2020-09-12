@@ -7,6 +7,8 @@
 ```
 <a href="http://www.lichengblog.com/demo/vue-quill-simple-demo/index.html" target="_blank">在线预览</a>
 
+  * 如果只是想使用集成有秀米的quill编辑器，那么选择在项目中下载npm包会更合适
+
 <a href="https://www.npmjs.com/package/vue-quill-xiumi" target="_blank">npm 地址</a>
 
 ### 资源
