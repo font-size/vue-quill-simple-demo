@@ -106,7 +106,9 @@ import blotSelect from './blot'
 blotSelect(Quill)
 export default {
   name: 'quill',
-  components: {
+  props: {
+    content: String,
+    value: String
   },
   data(){
     return {
@@ -124,6 +126,29 @@ export default {
         placeholder: '请输入内容...'
       }
     }
+  },
+  watch:{
+    content(newVal) {
+      if (this.quill) {
+        if (newVal && newVal !== this.editorContent) {
+          this.editorContent = newVal
+          this.quill.clipboard.dangerouslyPasteHTML(newVal)
+        } else if(!newVal) {
+          this.quill.setText('')
+        }
+      }
+    },
+    // Watch editorContent change
+    value(newVal) {
+      if (this.quill) {
+        if (newVal && newVal !== this.editorContent) {
+          this.editorContent = newVal
+          // this.quill.clipboard.dangerouslyPasteHTML(newVal)
+        } else if(!newVal) {
+          this.quill.setText('')
+        }
+      }
+    },
   },
   mounted () {
     // 初始化编辑器
@@ -201,6 +226,10 @@ export default {
       this.quill.insertEmbed(t || index, 'AppPanelEmbed', e)
       this.visible = false
       this.visible2 = false
+    },
+    setData(e, t) {
+      const index = this.selection?this.selection.index: 0
+      this.quill.clipboard.dangerouslyPasteHTML(t || index, e)
     },
     showModal() {
       this.visible = true

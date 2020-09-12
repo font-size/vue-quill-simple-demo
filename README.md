@@ -7,6 +7,8 @@
 ```
 <a href="http://www.lichengblog.com/demo/vue-quill-simple-demo/index.html" target="_blank">在线预览</a>
 
+<a href="https://www.npmjs.com/package/vue-quill-xiumi" target="_blank">npm 地址</a>
+
 ### 资源
 
 <a href="https://quilljs.com" target="_blank">quill官网</a><br>
