@@ -11,7 +11,15 @@
 
 <a href="https://www.npmjs.com/package/vue-quill-xiumi" target="_blank">npm 地址</a>
 
-### 资源
+## 运行项目
+  * 拉取项目后先执行npm i，再npm run serve运行项目
+```
+npm i
+
+npm run serve
+```  
+
+## 资源
 
 <a href="https://quilljs.com" target="_blank">quill官网</a><br>
 <a href="https://github.com/quilljs/quill" target="_blank">quill GitHub</a><br>
