@@ -5,7 +5,7 @@
 一个简单的vue项目使用quill示例
 1：toolbar使用。2：v-model数据双向绑定。3：一个简单自定义样式实现（字体） 4：自定义blot
 ```
-<a href="http://www.lichengblog.com/demo/vue-quill-simple-demo/index.html" target="_blank">在线预览</a>
+<a href="https://font-size.github.io/vue-quill-simple-demo/dist/index.html" target="_blank">在线预览</a>
 
   * 如果只是想使用集成有秀米的quill编辑器，那么选择在项目中下载npm包会更合适
 
