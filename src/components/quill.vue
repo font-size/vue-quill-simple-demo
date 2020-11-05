@@ -259,7 +259,7 @@ export default {
   margin-top: 4px;
   width: 33px;
   padding-right: 8px;
-  background-position: center
+  background-position: center;
   position: relative;
 }
 #custom-button-xiumi {
