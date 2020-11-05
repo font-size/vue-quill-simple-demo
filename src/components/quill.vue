@@ -259,14 +259,14 @@ export default {
   margin-top: 4px;
   width: 33px;
   padding-right: 8px;
-  background-position: center;
+  background-position: center
   position: relative;
 }
 #custom-button-xiumi {
-  background-image: url('http://xiumi.us/connect/ue/xiumi-connect-icon.png');
+  background-image: url('https://dl.xiumi.us/connect/ue/xiumi-connect-icon.png');
 }
 #custom-button-xiumi:hover {
-  background-image: url('http://xiumi.us/connect/ue/xiumi-connect-icon.png');
+  background-image: url('https://dl.xiumi.us/connect/ue/xiumi-connect-icon.png');
 }
 #custom-button-135 {
   background-image: url('http://static.135editor.com/img/icons/editor-135-icon.png');
